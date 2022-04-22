@@ -15,6 +15,7 @@ import BoardAdmin from "./components/board-admin.component";
 
 // import AuthVerify from "./common/auth-verify";
 import EventBus from "./common/EventBus";
+import Dash from "./Dashboard";
 
 class App extends Component {
   constructor(props) {
@@ -72,7 +73,11 @@ class App extends Component {
                 Home
               </Link>
             </li>
-
+            <li className="nav-item">
+              <Link to={"/Dash"} className="nav-link">
+                Dashboard 
+              </Link>
+            </li>
             {showModeratorBoard && (
               <li className="nav-item">
                 <Link to={"/mod"} className="nav-link">
@@ -137,6 +142,7 @@ class App extends Component {
             <Route path="/user" component={BoardUser} />
             <Route path="/mod" component={BoardModerator} />
             <Route path="/admin" component={BoardAdmin} />
+            <Route path="/dash" component={Dash}/>
           </Switch>
         </div>
 
