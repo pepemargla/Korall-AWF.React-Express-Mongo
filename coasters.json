@@ -1,0 +1,37 @@
+[
+    {
+      "title": "Shambhala!",
+      "description": "Esta es una montaña rusa de prueba para ver mis habilidades",
+      "length": 1000,
+      "inversions": 0,
+      "imageUrl": "https://farm6.staticflickr.com/5626/21205099940_a5679b81b6_c.jpg"
+    },
+    {
+      "title": "Kingda Ka",
+      "description": "Esta es una montaña rusa de prueba para ver mis habilidades",
+      "length": 950,
+      "inversions": 0,
+      "imageUrl": "https://cnnespanol.cnn.com/wp-content/uploads/2017/05/galeria-montancc83as-rusas-2017-cnn-1.jpg?resize=940,530"
+    },
+    {
+      "title": "Steel Dragon 2000",
+      "description": "Esta es una montaña rusa de prueba para ver mis habilidades",
+      "length": 950,
+      "inversions": 0,
+      "imageUrl": "https://bestonjuegosmecanicos.com.mx/wp-content/uploads/2020/09/venta-de-montana-rusa-tema-cobra.jpg"
+    },
+    {
+      "title": "Smiler",
+      "description": "Esta es una montaña rusa de prueba para ver mis habilidades ",
+      "length": 1100,
+      "inversions": 12,
+      "imageUrl": "https://hips.hearstapps.com/vidthumb/images/montan-a-rusa-superman-1534246136.jpg"
+    },
+    {
+      "title": "Nemesis",
+      "description": "Esta es una montaña rusa de prueba para ver mis habilidades",
+      "length": 820,
+      "inversions": 7,
+      "imageUrl": "https://as01.epimg.net/diarioas/imagenes/2020/07/10/actualidad/1594366975_189426_1594367210_noticia_normal_recorte1.jpg"
+    }
+]

@@ -16,6 +16,8 @@ import BoardAdmin from "./components/board-admin.component";
 // import AuthVerify from "./common/auth-verify";
 import EventBus from "./common/EventBus";
 import Dash from "./Dashboard";
+import Products from "./Productos";
+import Dashboard from "./Dashboard";
 
 class App extends Component {
   constructor(props) {
@@ -39,7 +41,7 @@ class App extends Component {
         showAdminBoard: user.roles.includes("ROLE_ADMIN"),
       });
     }
-    
+
     EventBus.on("logout", () => {
       this.logOut();
     });
@@ -73,7 +75,18 @@ class App extends Component {
                 Home
               </Link>
             </li>
-            
+            <li className="nav-item">
+              <Link to={"/products"} className="nav-link">
+                Productos
+              </Link>
+            </li>
+            {showModeratorBoard && (
+            <li className="nav-item">
+              <Link to={"/dash"} className="nav-link">
+                Dashboard
+              </Link>
+            </li>
+            )}
             {showModeratorBoard && (
               <li className="nav-item">
                 <Link to={"/mod"} className="nav-link">
@@ -146,11 +159,12 @@ class App extends Component {
             <Route path="/user" component={BoardUser} />
             <Route path="/mod" component={BoardModerator} />
             <Route path="/admin" component={BoardAdmin} />
-            <Route path="/dash" component={Dash}/>
+            <Route path="/products" component={Products} />
+            <Route path="/dash" component={Dashboard} />
           </Switch>
         </div>
 
-        { /*<AuthVerify logOut={this.logOut}/> */ }
+        { /*<AuthVerify logOut={this.logOut}/> */}
       </div>
     );
   }
