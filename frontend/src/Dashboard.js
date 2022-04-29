@@ -1,7 +1,7 @@
 import React ,{ useEffect } from "react";
 
 /* globals Chart:false, feather:false */
-function Dashboard() {
+function Dash() {
     'use strict'
   feather.replace({ 'aria-hidden': 'true' })
   // Graphs
@@ -310,4 +310,4 @@ var ctx = document.getElementById('myChart');
     
 }
 
-export default Dashboard;
+export default Dash;
