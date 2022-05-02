@@ -18,6 +18,7 @@ import EventBus from "./common/EventBus";
 import Dash from "./Dashboard";
 import Products from "./Productos";
 import Prueba3d from "./components/Scene3d.component";
+import Modelado from "./3dmodels";
 
 class App extends Component {
   constructor(props) {
@@ -78,6 +79,11 @@ class App extends Component {
             <li className="nav-item">
               <Link to={"/objeto3d"} className="nav-link">
                 Visor 3d
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to={"/modelado"} className="nav-link">
+                Modelado
               </Link>
             </li>
             <li className="nav-item">
@@ -160,6 +166,7 @@ class App extends Component {
             <Route path="/admin" component={BoardAdmin} />
             <Route path="/products" component={Products}/>
             <Route path="/dash" component={Dash}/>
+            <Route path="/modelado" component={Modelado}/>
             <Route exact path="/objeto3d" component={Prueba3d}/>
           </Switch>
         </div>
