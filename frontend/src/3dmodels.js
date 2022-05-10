@@ -10,30 +10,33 @@ const Modelado = () => {
    
     const mountRef = useRef(null)
     useEffect(() => {
-  /*CONSTRUCCION SCENA*/
+     /*CONSTRUCCION SCENA*/
      //const cube = new THREE.Mesh(geometry, material); 
      const currentMount = mountRef.current
      const material =new THREE.MeshPhongMaterial({color: 0x00D6D6});
      const scene = new THREE.Scene();
      scene.background = new THREE.Color(0x2a3b4c);
-     const camera = new THREE.PerspectiveCamera(75, currentMount.clientWidth /currentMount.clientHeight, 0.1, 10000);
+     const camera = new 
+     THREE.PerspectiveCamera(25, 
+         currentMount.clientWidth /currentMount.clientHeight,
+          1, 
+          10000);
+ 
      scene.add(camera);
-     camera.position.z = 10;
+     
+     camera.position.x = 65;
+     camera.position.y = 90;
+     camera.position.z = 0;
+ 
+     camera.lookAt (new THREE.Vector3(0,0,0));
      
      const renderer = new THREE.WebGLRenderer()
      renderer.setSize(currentMount.clientWidth, currentMount.clientHeight)
      currentMount.appendChild(renderer.domElement)
      
      const controls = new OrbitControls(camera, renderer.domElement);
-   /*FIN CONSTRUCCION SCENA */
- 
- 
-   /*  new STLLoader().load("/3dModels/Eiffel_tower_sample.stl", (stl) => {    
-     const mesh = new THREE.Mesh(stl, material);
-     mesh.position.set(0,0,0);
-     mesh.scale.set(0.135, 0.135, 0.135);
-     scene.add(mesh);
-     });*/
+     /*FIN CONSTRUCCION SCENA */
+
      /*Light's */
      const light = new THREE.DirectionalLight(0xffffff);
      light.position.set(-5, 5, 30)
@@ -45,47 +48,55 @@ const Modelado = () => {
      light3.position.set(-5, 10, 0)
      scene.add(light3)
      const light4 = new THREE.DirectionalLight(0xffffff);
-     light4.position.set(-15, -5, 0)
+     light4.position.set(-10, -5, 0)
      scene.add(light4)
      const light5 = new THREE.DirectionalLight(0xffffff);
-     light5.position.set(5, -10, 0)
+     light5.position.set(20, -10, 10)
      scene.add(light5)
-     const geometry = new THREE.BoxGeometry(5,5,5);
-     const mesh = new THREE.Mesh();
-     const cube = new THREE.Mesh(geometry, material); 
-     scene.add(cube);
-     camera.lookAt(cube.position);
+     const loader = new STLLoader();
+ 
+     loader.load("/3dModels/Eiffel_tower_sample.stl", function (geometry) {
+         const mat = new THREE.MeshPhongMaterial({
+           color: 0x086233,
+           transparent:true,
+           opacity:1,
+           shininess:200,
+         })
+ 
+         const model = new THREE.Mesh(geometry, mat);
+         model.rotation.x = -0.5 * Math.PI;
+         model.position.y = -10
+         model.scale.set(0.3, 0.3, 0.3);
+         model.name = 'armMesh';
+         model.castShadow = false;    
+         scene.add(model);
+ 
+ 
      const gui = new dat.GUI();
      const world = {
-         box: {
-             width: 5,
-             height: 5,
-             depth: 5
+         model: {
+             x: 0.3,
+             y: 0.3,
+             z: 0.3
          }
      }
-    gui.add(world.box, 'width', 1 ,20).onChange(() =>{
-         cube.geometry.dispose()
-         cube.geometry = new THREE.BoxGeometry(world.box.width,world.box.height,world.box.depth)
+    gui.add(world.model, 'x', 0.10 ,0.50).onChange(() =>{
+         model.scale.set(world.model.x,world.model.y,world.model.z)
+         
      })
  
-     gui.add(world.box, 'height', 1, 20).onChange(() =>{
-         cube.geometry.dispose()
-         cube.geometry = new THREE.BoxGeometry(
-             world.box.width,
-             world.box.height,
-             world.box.depth
-         )
- 
+     gui.add(world.model, 'y', 0.10 ,0.50).onChange(() =>{
+         model.scale.set(world.model.x,world.model.y,world.model.z)
+         
      })
  
-     gui.add(world.box, 'depth', 1, 20).onChange(() =>{
-         cube.geometry.dispose()
-         cube.geometry = new THREE.BoxGeometry(
-             world.box.width,
-             world.box.height,
-             world.box.depth
-         )
+     //cube.geometry = new THREE.Mesh(world.cube.z)
+     gui.add(world.model, 'z', 0.10 ,0.50).onChange(() =>{
+         model.scale.set(world.model.x,world.model.y,world.model.z)
+         
      })
+ 
+ 
      /*GUI.DAT */
      const options = {
          color: 0x00D6D6,
@@ -94,64 +105,92 @@ const Modelado = () => {
  
          },
          modelo1: () => {
-             cube.clear();
+             model.clear();
          },
          modelo2: () => {
-             cube.clear();
+             model.clear();
          },
          export: () =>{
-             const buffer = STLExporter.fromMesh(mesh);
+             const buffer = new STLExporter().parse(scene);
              const blob = new Blob([buffer], { type: STLExporter.mimeType });
-             saveAs(blob, 'model3d.stl');
+            
  
          }
        };
  
-    
-     gui.add(options,"modelo1").onChange((delet) =>{
-      
-       /* new STLLoader().load("/3dModels/Eiffel_tower_sample.stl", (stl) => {
-         
-           const mesh = new THREE.Mesh(stl, material);
-             scene.add(mesh);
-             mesh.scale.set(0.1, 0.1, 0.1);
-             mesh.position.set(0, -5, 0);
-             mesh.rotation.x = -Math.PI/2;
-             
-         */
-             scene.remove(cube);
-             new STLLoader().load("/3dModels/Eiffel_tower_sample.stl", (stl) => {
-                   
-                   const mesh = new THREE.Mesh(stl, material);
-                   scene.add(mesh);
-                   mesh.scale.set(0.1, 0.1, 0.1);
-                   mesh.position.set(0, -5, 0);
-                   mesh.rotation.x = -Math.PI/2;
-                   
-                }   
-             )
-       });
-     gui.add(options,"modelo2").onChange((delet) =>{
-         scene.remove(cube);
-     new STLLoader().load("/3dModels/Stanford_Bunny_sample.stl", (stl) => {
-            
-           const mesh = new THREE.Mesh(stl, material);
-           scene.add(mesh);
-           mesh.scale.set(0.085, 0.085, 0.085);
-           mesh.position.set(-3, -5, 0);
-           mesh.rotation.x = -Math.PI/2;
+       gui.add(options,"modelo1").onChange((delet) =>{
+        /*  new STLLoader().load("/3dModels/Eiffel_tower_sample.stl", (stl) => {
+             const mesh = new THREE.Mesh(stl, material);
+               scene.add(mesh);
+               mesh.scale.set(0.1, 0.1, 0.1);
+               mesh.position.set(0, -5, 0);
+               mesh.rotation.x = -Math.PI/2; 
+           */
+              scene.clear()
+               loader.load("/3dModels/Stanford_Bunny_sample.stl", function (geometry) {
+                   const mat = new THREE.MeshPhongMaterial({
+                     color: 0x086113,
+                     transparent:true,
+                     opacity:1,
+                     shininess:200,
+                   })
+                  }   
+               )
+               const model = new THREE.Mesh(geometry, mat);
+               model.rotation.x = -0.5 * Math.PI;
+               model.position.y = -10
+ 
+               model.scale.set(0.1, 0.1, 0.1);
+               model.name = 'armMesh';
+               model.castShadow = false;    
+               scene.add(model);
+               scene.add(light)
+               scene.add(light2)
+               scene.add(light3)
+               scene.add(light4)
+               scene.add(light5)
            
-        }   
-     )});
-     gui.add(options,'export').onChange((exp) =>{
-         var exporter = new STLExporter();
-         const buffer = exporter.parse(scene);
-         const blob = new Blob([buffer], { type: STLExporter.mimeType });
-         saveAs(blob, 'model3d.stl');
-     })
-     gui.addColor(options, "color").onChange((val) => {
-         material.color.set(val);
-       });
+         });
+         
+       gui.add(options,"modelo2").onChange((delet) =>{
+           scene.clear()
+       new STLLoader().load("/3dModels/Stanford_Bunny_sample.stl", (stl) => {
+              
+             const mesh = new THREE.Mesh(stl, material);
+             scene.add(mesh);
+             mesh.scale.set(0.3, 0.3, 0.3);
+             mesh.position.set(-3, -5, 0);
+             mesh.rotation.x = -Math.PI/2;
+             scene.add(light)
+             scene.add(light2)
+             scene.add(light3)
+             scene.add(light4)
+             scene.add(light5)
+             
+          }   
+       )});
+   
+       /**EXPORTER */
+      
+      
+       
+       gui.add(options,'export').onChange((exp) =>{
+           
+           const buffer = new STLExporter().parse(scene);
+           
+           const blob = new Blob([buffer], { type: STLExporter.mimeType });
+           saveAs(blob, 'model.stl');
+        
+          
+       })
+       gui.addColor(options, "color").onChange((val) => {
+           mat.color.set(val);
+         });
+ 
+ 
+     });
+
+   
      const animate = () => {
       
          renderer.render(scene,camera);
@@ -166,26 +205,6 @@ const Modelado = () => {
          currentMount.removeChild(renderer.domElement);
      
      }
-     /*FIN ANyREN/
-        /*  const loader = new STLLoader()
-     
-     loader.load(
-     "/3dModels/Eiffel_tower_sample.stl",
-     function (geometry) {
-         const mesh = new THREE.Mesh(geometry, material)
-         scene.add(mesh)
-         mesh.scale.set(0.1, 0.1, 0.1);
-         mesh.position.set(0, -5, 0);
-         mesh.rotation.x = -Math.PI/2;
-     },
-     (xhr) => {
-         console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
-     },
-     (error) => {
-         console.log(error)
-     }
-     )*/  
-  
  })
      return(
          <div>
