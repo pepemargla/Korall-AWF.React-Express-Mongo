@@ -11,7 +11,7 @@ const Modelado = () => {
     const mountRef = useRef(null)
     useEffect(() => {
      /*CONSTRUCCION SCENA*/
-     //const cube = new THREE.Mesh(geometry, material); 
+    
      const currentMount = mountRef.current
      const material =new THREE.MeshPhongMaterial({color: 0x00D6D6});
      const scene = new THREE.Scene();
@@ -36,7 +36,12 @@ const Modelado = () => {
      
      const controls = new OrbitControls(camera, renderer.domElement);
      /*FIN CONSTRUCCION SCENA */
-
+     /*  new STLLoader().load("/3dModels/Eiffel_tower_sample.stl", (stl) => {    
+     const mesh = new THREE.Mesh(stl, material);
+     mesh.position.set(0,0,0);
+     mesh.scale.set(0.135, 0.135, 0.135);
+     scene.add(mesh);
+     });*/
      /*Light's */
      const light = new THREE.DirectionalLight(0xffffff);
      light.position.set(-5, 5, 30)
@@ -55,7 +60,9 @@ const Modelado = () => {
      scene.add(light5)
      const loader = new STLLoader();
  
-     loader.load("/3dModels/Eiffel_tower_sample.stl", function (geometry) {
+     let modelname = "Eiffel_tower_sample";
+     loader.load("/3dModels/"+modelname+".stl", function (geometry) {
+    
          const mat = new THREE.MeshPhongMaterial({
            color: 0x086233,
            transparent:true,
@@ -64,6 +71,7 @@ const Modelado = () => {
          })
  
          const model = new THREE.Mesh(geometry, mat);
+         console.log(model)
          model.rotation.x = -0.5 * Math.PI;
          model.position.y = -10
          model.scale.set(0.3, 0.3, 0.3);
@@ -71,15 +79,22 @@ const Modelado = () => {
          model.castShadow = false;    
          scene.add(model);
  
+         
  
      const gui = new dat.GUI();
      const world = {
+         color: 0x00D6D6,
          model: {
              x: 0.3,
              y: 0.3,
              z: 0.3
+         },
+         import: {
+ 
+ 
          }
      }
+ 
     gui.add(world.model, 'x', 0.10 ,0.50).onChange(() =>{
          model.scale.set(world.model.x,world.model.y,world.model.z)
          
@@ -95,6 +110,9 @@ const Modelado = () => {
          model.scale.set(world.model.x,world.model.y,world.model.z)
          
      })
+ 
+     /*FIN*/
+   
  
  
      /*GUI.DAT */
@@ -113,6 +131,10 @@ const Modelado = () => {
          export: () =>{
              const buffer = new STLExporter().parse(scene);
              const blob = new Blob([buffer], { type: STLExporter.mimeType });
+            
+ 
+         },
+         import: () =>{
             
  
          }
@@ -183,14 +205,63 @@ const Modelado = () => {
         
           
        })
-       gui.addColor(options, "color").onChange((val) => {
-           mat.color.set(val);
-         });
- 
- 
+      
+         gui.add(options,'import').onChange((imp) =>{
+                   
+        })
+        
      });
-
-   
+ /*INICIO DE IMPORT */
+     var input = document.getElementById( 'input' );
+ 
+         input.addEventListener( 'change', function( event ) {
+             
+             const file = this.files[0];
+             const reader = new FileReader();
+             console.log(file);
+             
+             
+             reader.addEventListener( 'load', function ( event ) {
+                 //console.log('Event - - '+event);
+                 const contents = event.target.result;
+                 var model_load = new STLLoader().parse(contents);
+                 scene.clear()
+               
+                     const material = new THREE.MeshPhongMaterial({
+                         color: 0x086233,
+                         transparent:true,
+                         opacity:1,
+                         shininess:200,
+                     })
+                     const mesh = new THREE.Mesh( model_load, material );
+                     console.log('Mesh - - '+mesh);
+                   
+                     
+                     scene.add( mesh );
+                     mesh.scale.set(0.3, 0.3, 0.3);
+             mesh.position.set(-3, -5, 0);
+             mesh.rotation.x = -Math.PI/2;
+             scene.add(light)
+             scene.add(light2)
+             scene.add(light3)
+             scene.add(light4)
+             scene.add(light5)
+              
+         
+             }, false );
+             
+             if ( reader.readAsBinaryString !== undefined ) {
+         
+                 reader.readAsBinaryString( file );
+         
+             } else {
+         
+                 reader.readAsArrayBuffer( file );
+         
+             }
+             
+         } );
+         /*FIN DE IMPORT */
      const animate = () => {
       
          renderer.render(scene,camera);
@@ -208,7 +279,7 @@ const Modelado = () => {
  })
      return(
          <div>
-            
+            <input id="input" type="file"></input>
           <div ref={mountRef} style = {{width: '100%', height: '100vh'}}> 
           </div>
  
