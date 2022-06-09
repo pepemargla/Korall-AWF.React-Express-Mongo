@@ -13,7 +13,7 @@ import './CoasterDetails.css'
 const CoasterDetails = () => {
 
     const { coaster_id } = useParams()
-    const [coaster, setCoaster] = useState('https://storage.googleapis.com/ucloud-v3/ccab50f18fb14c91ccca300a.stl')
+    const [coaster, setCoaster] = useState('/3dModels/Car.stl')
 
  
     const mountRef = useRef(null)
@@ -24,7 +24,7 @@ const CoasterDetails = () => {
         //     .then(response => response.json())
         //     .then(coaster => setCoaster(coaster))
 
-        const getData = await fetch(`http://localhost:5005/api/details/${coaster_id}`)
+        const getData = await fetch(`http://localhost:27017/api/details/${coaster_id}`)
         const resp = await getData.json()
         setCoaster(resp.modelUrl)
     }
