@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
+import AuthService from "../services/auth.service";
 
 import UserService from "../services/user.service";
 
@@ -32,9 +34,15 @@ export default class Home extends Component {
   render() {
     return (
       <div className="container">
-        <header className="jumbotron">
-          <h3>{this.state.content}</h3>
-        </header>
+        {
+          AuthService.getCurrentUser() ? (
+            <header className="jumbotron">
+              <h3>{this.state.content}</h3>
+            </header>
+          )
+          : <Redirect to="/login" />
+          
+        }
       </div>
     );
   }

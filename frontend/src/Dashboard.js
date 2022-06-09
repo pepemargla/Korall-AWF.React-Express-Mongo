@@ -1,4 +1,5 @@
 import React ,{ useEffect } from "react";
+import { Link } from 'react-router-dom'
 
 /* globals Chart:false, feather:false */
 function Dash() {
@@ -93,12 +94,12 @@ var ctx = document.getElementById('myChart');
               Orders
             </a>
           </li>
-          <li class="nav-item">
+          <Link to={`/products`}>
             <a class="nav-link" href="#">
               <span data-feather="shopping-cart"></span>
               Products
             </a>
-          </li>
+          </Link>
           <li class="nav-item">
             <a class="nav-link" href="#">
               <span data-feather="users"></span>

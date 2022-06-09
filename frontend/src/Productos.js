@@ -13,6 +13,7 @@ const Products = () => {
         fetch('http://localhost:8080/api/coasters')
             .then(res => res.json())
             .then(allCoasters => setCoasters(allCoasters))
+
     }
 
     loadCoasters()
@@ -23,7 +24,7 @@ const Products = () => {
             <hr />
             {coasters.map(eachCoaster => {
                 return (
-                    <Link to={`/detalles/${eachCoaster._id}`}>
+                    <Link to={`/details/${eachCoaster._id}`} key={eachCoaster._id}>
                         <article className='coaster-card'>
                             <img src={eachCoaster.imageUrl}></img>
                             <h3>{eachCoaster.title}</h3>
